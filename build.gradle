@@ -27,19 +27,24 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.postgresql:postgresql'
 
+    // https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-mail
+    implementation 'org.springframework.boot:spring-boot-starter-mail:1.2.0.RELEASE'
+
+    // ************************* FOR QUARTZ SCHEDULER ********************
     implementation 'org.springframework.boot:spring-boot-starter-quartz'
-    // FOR QUARTZ POOL
+    // FOR QUARTZ JDBC CONNECTION POOLING
     // https://mvnrepository.com/artifact/com.mchange/c3p0
     implementation 'com.mchange:c3p0:0.9.5.5'
+    // *********************************************************************
 
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
-
-    annotationProcessor 'org.projectlombok:lombok'
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
     compileOnly 'org.springframework.boot:spring-boot-starter-data-jpa'
+
     compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
 
 }
 

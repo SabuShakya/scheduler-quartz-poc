@@ -8,7 +8,7 @@ import com.sabu.schedulerquartzpoc.model.JobDescriptor;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.quartz.JobBuilder;
 import org.quartz.JobDataMap;
@@ -24,7 +24,7 @@ import org.springframework.stereotype.Service;
  **/
 @Slf4j
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class JobService {
 
   private final Scheduler scheduler;
@@ -33,12 +33,15 @@ public class JobService {
 
   private final TriggerBuilderUtil triggerBuilder;
 
+  /**
+   * @param jobDescriptor CREATES JOB BASED ON JOB DESCRIPTOR AND SCHEDULES AS PER THE TRIGGER
+   *     DESCRIPTION
+   */
   public void createJob(JobDescriptor jobDescriptor) {
 
     JobDetail jobDetail = jobBuilder.buildJobDetail(jobDescriptor);
 
     Set<Trigger> triggers = triggerBuilder.buildTriggers(jobDescriptor);
-
 
     try {
       log.info("Scheduling job with key :  {}", jobDetail.getKey());
@@ -121,7 +124,11 @@ public class JobService {
   }
 
 
-
+  /**
+   * @param group
+   * @param name
+   * @param descriptor UPDATES THE EXISTING JOB WITH GIVEN GROUP AND NAME
+   */
   public void updateJob(String group, String name, JobDescriptor descriptor) {
     try {
       JobDetail oldJobDetail = scheduler.getJobDetail(jobKey(name, group));
@@ -145,7 +152,12 @@ public class JobService {
     }
   }
 
-
+  /**
+   * @param group
+   * @param name
+   * @param descriptor
+   * @return REPLACES JOB WITH GROUP AND NAME WITH THE NEW ONE GIVEN IN JOB DESCRIPTOR
+   */
   public JobDescriptor replaceJob(String group, String name, JobDescriptor descriptor) {
     descriptor.setGroup(group);
     descriptor.setName(name);
@@ -167,7 +179,10 @@ public class JobService {
     return descriptor;
   }
 
-
+  /**
+   * @param group
+   * @param name DELETES JOB WITH KEY NAME AND GROUP
+   */
   public void deleteJob(String group, String name) {
     try {
       scheduler.deleteJob(jobKey(name, group));
@@ -177,7 +192,10 @@ public class JobService {
     }
   }
 
-
+  /**
+   * @param group
+   * @param name PAUSES JOB
+   */
   public void pauseJob(String group, String name) {
     try {
       scheduler.pauseJob(jobKey(name, group));
@@ -187,6 +205,10 @@ public class JobService {
     }
   }
 
+  /**
+   * @param group
+   * @param name RESUMES JOB
+   */
   public void resumeJob(String group, String name) {
     try {
       scheduler.resumeJob(jobKey(name, group));
